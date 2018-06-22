@@ -20,12 +20,22 @@ lib%.so: lib%.oo
 %.oo: %.c
 	$(CC) -c -DPIC -fPIC $(CFLAGS) -o $@ $<   
 
-clean: clean_kmod clean_lib 
+clean: clean-kmod clean-lib 
 
-clean_kmod: 
+clean-kmod: 
 	-$(MAKE) -C $(KDIR) M=$$PWD clean
 
-clean_lib:
+clean-lib:
 	-rm *.so *.oo
 
-.PHONY: all kmod lib clean clean_kmod clean_lib
+install: install-kmod install-lib
+
+install-kmod: kmod
+	mkdir -p /lib/modules/`uname -r`/kernel/misc
+	cp xt_PROTO.ko /lib/modules/`uname -r`/kernel/misc/
+	depmod -A `uname -r`
+
+install-lib: lib
+	cp libxt_PROTO.so `pkg-config --variable=xtlibdir xtables`/
+
+.PHONY: all kmod lib clean clean-kmod clean-lib install install-kmod install-lib
