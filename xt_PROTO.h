@@ -8,9 +8,9 @@
 
 enum {
 	XT_PROTO_SET = 0,
+	XT_PROTO_STOP_AT_FRAG = 1,
+	XT_PROTO_STOP_AT_AUTH = 2
 };
-
-#define XT_PROTO_MAXMODE	XT_PROTO_SET
 
 struct xt_PROTO_info {
 	__u8	mode;
